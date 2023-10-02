@@ -1,0 +1,90 @@
+html {
+  max-width: 100%;
+}
+
+header {
+  padding: 2rem;
+  background-color: black;
+  max-width: 100%;
+}
+
+header p {
+  font-family: "Courier New", Courier, monospace, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: yellow;
+}
+
+h1 {
+  font-family: Cairo, serif;
+  font-weight: bolder;
+  font-size: 40px;
+  color: yellow;
+}
+
+img {
+  max-width: 400px;
+  max-height: 400px;
+  justify-self: center;
+  align-self: center;
+  border: 8px solid transparent;
+}
+
+img:hover {
+  cursor: pointer;
+  border: 8px solid red;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: darkgrey;
+  padding: 20px 0;
+}
+
+div {
+  padding: 1rem 4rem;
+}
+
+div p {
+  font-family: "Courier New", Courier, monospace, sans-serif;
+  font-size: 18px;
+  color: yellow;
+}
+
+div:last-child {
+  text-justify: right;
+}
+
+section {
+  width: 90%;
+  height: 480px;
+  margin: auto;
+  display: inline-grid;
+  background-color: yellow;
+  grid-template-columns: 20px 1fr 20px 1fr 20px 1fr 20px;
+}
+
+#left-img {
+  grid-column-start: 2;
+}
+
+#middle-img {
+  grid-column-start: 4;
+}
+
+#right-img {
+  grid-column-start: 6;
+}
+
+footer {
+  padding: 2rem;
+  background-color: black;
+  max-width: 100%;
+  font-family: "Courier New", Courier, monospace, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: yellow;
+  text-align: center;
+}
