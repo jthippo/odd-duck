@@ -46,6 +46,7 @@ function getRandomProduct() {
 
 // Function to render 3 random Products
 function renderProducts() {
+  // Define 3 new random products
   let randomProduct1 = getRandomProduct();
   let randomProduct2 = getRandomProduct();
   let randomProduct3 = getRandomProduct();
@@ -75,12 +76,21 @@ function renderProducts() {
   allProducts[randomProduct3].views++;
 }
 
+// ENSURE PRODUCTS CANNOT REPEAT ON THE NEXT CLICK
+//
+// I spent a while on this and the idea was to:
+//
+// 1. At the end of renderProducts(), define the products on the page as variables and remove them from the array
+// 2. After the randomProductx variables have been set from the remaining array entries, push the removed products back into the array for future selection
+//
+// It was working for a bit, unless one of the empty slots was selected and then it returned "undefined". I think defining the array as const rather than let means the number of array entries doesn't change even when actual entries are removed. Spent too long on it for now so moving onto the Chart.js portion.
+
 // Function to collect votes
 function handleProductVote(event) {
   // Need to add functionality that stops once the sum of all votes = 25
   if (userVotes >= maxVotes) {
     alert(
-      "25 is the maximum number of votes. Kindly refrain from voting or face redundancy."
+      "25 votes have been registered. Results are now available by clicking the SHOW RESULTS button below."
     );
     return;
   }
@@ -108,21 +118,108 @@ function handleProductVote(event) {
   }
 }
 
-// Add event listener
+// Add event listener to vote collection
 productContainer.addEventListener("click", handleProductVote);
 
-// Display the results
+// Display the results - using an if statement to check if 25 total votes have been received, else the results are not viewable
 function showResults() {
-  // Generate lis
-  const results = document.getElementById("results");
-  for (let i = 0; i < allProducts.length; i++) {
-    const li = document.createElement("li");
-    const product = allProducts[i];
-    li.textContent = `${product.name} has ${product.views} views and ${product.votes} votes.`;
-    results.appendChild(li);
+  if (userVotes >= 25) {
+    // Generate list
+    const results = document.getElementById("results");
+    for (let i = 0; i < allProducts.length; i++) {
+      const li = document.createElement("li");
+      const product = allProducts[i];
+      li.textContent = `${product.name} has ${product.views} views and ${product.votes} votes.`;
+      results.appendChild(li);
+    }
+
+    const ctx = document.getElementById("resultsChart");
+    const config = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: [
+          "Unspecificed Droid Bag",
+          "Fraudulent Banana Slicer",
+          "iWiper",
+          "Salacious Yellow Boots",
+          "Breakfast For Gnomes",
+          "Meatball Bubblegum",
+          "Unsettling Chair",
+          "Cthulhu",
+          "Duck Mask For Dogs",
+          "Tinned Dragon Meat",
+          "Cutlery Extensions For Biro",
+          "Pet Sweep Cleaning System",
+          "Pizza Scissors Version 2",
+          "Terrifying Shark Sleeping Bag",
+          "Baby Sweep Cleaning System",
+          "Terrifying Tauntaun Sleeping Bag",
+          "Tinned Unicorn Meat",
+          "Infinite Watering Can",
+          "Why?-n Glass",
+        ],
+        // I tried using labels: allProducts.name, but it didn't quite work. Not sure why not, Google suggests it should.
+        datasets: [
+          // I know there's a better way to do this with a for loop but I'm grouchy and tired today.
+          {
+            label: "Total votes",
+            data: [
+              allProducts[0].votes,
+              allProducts[1].votes,
+              allProducts[2].votes,
+              allProducts[3].votes,
+              allProducts[4].votes,
+              allProducts[5].votes,
+              allProducts[6].votes,
+              allProducts[7].votes,
+              allProducts[8].votes,
+              allProducts[9].votes,
+              allProducts[10].votes,
+              allProducts[11].votes,
+              allProducts[12].votes,
+              allProducts[13].votes,
+              allProducts[14].votes,
+              allProducts[15].votes,
+              allProducts[16].votes,
+              allProducts[17].votes,
+              allProducts[18].votes,
+            ],
+          },
+          {
+            label: "Total views",
+            data: [
+              allProducts[0].views,
+              allProducts[1].views,
+              allProducts[2].views,
+              allProducts[3].views,
+              allProducts[4].views,
+              allProducts[5].views,
+              allProducts[6].views,
+              allProducts[7].views,
+              allProducts[8].views,
+              allProducts[9].views,
+              allProducts[10].views,
+              allProducts[11].views,
+              allProducts[12].views,
+              allProducts[13].views,
+              allProducts[14].views,
+              allProducts[15].views,
+              allProducts[16].views,
+              allProducts[17].views,
+              allProducts[18].views,
+            ],
+          },
+        ],
+      },
+    });
+  } else {
+    alert(
+      "Results unavailable until 25 votes have been received. Attempting to view results before 25 votes have been received may result in redundancy."
+    );
   }
 }
 
+// Run showResults when we click on the button
 const viewResults = document.getElementById("button");
 viewResults.addEventListener("click", showResults);
 

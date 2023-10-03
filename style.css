@@ -2,6 +2,10 @@ html {
   max-width: 100%;
 }
 
+canvas {
+  max-width: 85%;
+}
+
 header {
   padding: 2rem;
   background-color: black;
@@ -17,7 +21,7 @@ header p {
 
 h1 {
   font-family: Cairo, serif;
-  font-weight: bolder;
+  font-weight: bold;
   font-size: 40px;
   color: yellow;
 }
@@ -92,7 +96,7 @@ button {
   width: 250px;
   background-color: black;
   font-family: Cairo, serif;
-  font-weight: bolder;
+  font-weight: bold;
   font-size: 40px;
   color: white;
   border: 8px solid transparent;
