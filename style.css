@@ -45,6 +45,8 @@ main {
 
 div {
   padding: 1rem 4rem;
+  display: flex;
+  justify-content: center;
 }
 
 div p {
@@ -76,6 +78,28 @@ section {
 
 #right-img {
   grid-column-start: 6;
+}
+
+ul {
+  list-style-type: square;
+  font-family: "Courier New", Courier, monospace, sans-serif;
+  font-size: 16px;
+  color: yellow;
+}
+
+button {
+  cursor: pointer;
+  width: 250px;
+  background-color: black;
+  font-family: Cairo, serif;
+  font-weight: bolder;
+  font-size: 40px;
+  color: white;
+  border: 8px solid transparent;
+}
+
+button:hover {
+  color: yellow;
 }
 
 footer {
