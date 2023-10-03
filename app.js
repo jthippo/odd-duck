@@ -4,17 +4,16 @@ let image1 = document.querySelector("section img:first-child");
 let image2 = document.querySelector("section img:nth-child(2)");
 let image3 = document.querySelector("section img:last-child");
 
+// Set up limiting number of votes available
+let userVotes = 0;
+let maxVotes = 25;
+
 // Constructor to make Products
 function Product(name, src) {
   this.name = name;
   this.src = src;
   this.views = 0;
   this.votes = 0;
-}
-
-// Function to choose a random Product
-function getRandomProduct() {
-  return Math.floor(Math.random() * allProducts.length);
 }
 
 // Make all Products in array
@@ -40,13 +39,18 @@ const allProducts = [
   new Product("Why?-n Glass", "./img/wine-glass.jpg"),
 ];
 
+// Function to choose a random Product
+function getRandomProduct() {
+  return Math.floor(Math.random() * allProducts.length);
+}
+
 // Function to render 3 random Products
 function renderProducts() {
   let randomProduct1 = getRandomProduct();
   let randomProduct2 = getRandomProduct();
   let randomProduct3 = getRandomProduct();
 
-  // Stop products being the same
+  // Stop Products being the same
   while (
     randomProduct1 === randomProduct2 ||
     randomProduct1 === randomProduct3 ||
@@ -71,14 +75,25 @@ function renderProducts() {
   allProducts[randomProduct3].views++;
 }
 
-// Functoin to collect votes
+// Function to collect votes
 function handleProductVote(event) {
+  // Need to add functionality that stops once the sum of all votes = 25
+  if (userVotes >= maxVotes) {
+    alert(
+      "25 is the maximum number of votes. Kindly refrain from voting or face redundancy."
+    );
+    return;
+  }
+  // Increase votes on successful click
+  userVotes++;
   // Get the name of the voted product
   let votedProduct = event.target.alt;
 
   // Check if the click is on a valid image
   if (event.target === productContainer) {
-    alert("You must vote for a product or face redundancy.");
+    alert(
+      "Not a valid selection. Kindly vote for a product or face redundancy."
+    );
   } else {
     renderProducts();
   }
@@ -96,7 +111,20 @@ function handleProductVote(event) {
 // Add event listener
 productContainer.addEventListener("click", handleProductVote);
 
+// Display the results
+function showResults() {
+  // Generate lis
+  const results = document.getElementById("results");
+  for (let i = 0; i < allProducts.length; i++) {
+    const li = document.createElement("li");
+    const product = allProducts[i];
+    li.textContent = `${product.name} has ${product.views} views and ${product.votes} votes.`;
+    results.appendChild(li);
+  }
+}
+
+const viewResults = document.getElementById("button");
+viewResults.addEventListener("click", showResults);
+
 // RENDOR!!!!!
 renderProducts();
-
-// Need to add functionality that stops once the sum of all votes = 25
