@@ -8,40 +8,68 @@ let image3 = document.querySelector("section img:last-child");
 let userVotes = 0;
 let maxVotes = 25;
 
-// Constructor to make Products
-function Product(name, src) {
+// Create global array to track totals
+const productsPersisting = [];
+
+// Constructor to make Products and push to array
+function Product(name, views, votes) {
   this.name = name;
-  this.src = src;
-  this.views = 0;
-  this.votes = 0;
+  this.src = `./img/${name}.jpg`;
+  this.views = views;
+  this.votes = votes;
+  productsPersisting.push(this);
 }
 
-// Make all Products in array
-const allProducts = [
-  new Product("Unspecificed Droid Bag", "./img/bag.jpg"),
-  new Product("Fraudulent Banana Slicer", "./img/banana.jpg"),
-  new Product("iWiper", "./img/bathroom.jpg"),
-  new Product("Salacious Yellow Boots", "./img/boots.jpg"),
-  new Product("Breakfast For Gnomes", "./img/breakfast.jpg"),
-  new Product("Meatball Bubblegum", "./img/bubblegum.jpg"),
-  new Product("Unsettling Chair", "./img/chair.jpg"),
-  new Product("Cthulhu", "./img/cthulhu.jpg"),
-  new Product("Duck Mask For Dogs", "./img/dog-duck.jpg"),
-  new Product("Tinned Dragon Meat", "./img/dragon.jpg"),
-  new Product("Cutlery Extensions For Biro", "./img/pen.jpg"),
-  new Product("Pet Sweep Cleaning System", "./img/pet-sweep.jpg"),
-  new Product("Pizza Scissors Version 2", "./img/scissors.jpg"),
-  new Product("Terrifying Shark Sleeping Bag", "./img/shark.jpg"),
-  new Product("Baby Sweep Cleaning System", "./img/sweep.png"),
-  new Product("Terrifying Tauntaun Sleeping Bag", "./img/tauntaun.jpg"),
-  new Product("Tinned Unicorn Meat", "./img/unicorn.jpg"),
-  new Product("Infinite Watering Can", "./img/water-can.jpg"),
-  new Product("Why?-n Glass", "./img/wine-glass.jpg"),
-];
+// Function to add all products to local storage
+function addToLocalStorage() {
+  const productsStringified = JSON.stringify(productsPersisting);
+  localStorage.setItem("productsPersisting", productsStringified);
+}
+
+// Grab products in local storage, parse into objects and loop through to add to array;
+function grabLocalStorage() {
+  const productsFromLocalStorage = JSON.parse(
+    localStorage.getItem("productsPersisting")
+  );
+  for (let i = 0; i < productsFromLocalStorage.length; i++) {
+    new Product(
+      productsFromLocalStorage[i].name,
+      productsFromLocalStorage[i].views,
+      productsFromLocalStorage[i].votes
+    );
+  }
+}
+
+// Function to check if local storage exists; if not, populate with products. If so, grab it!
+function checkLocalStorage() {
+  if (localStorage.length === 0) {
+    new Product("bag", 0, 0);
+    new Product("banana", 0, 0);
+    new Product("bathroom", 0, 0);
+    new Product("boots", 0, 0);
+    new Product("breakfast", 0, 0);
+    new Product("bubblegum", 0, 0);
+    new Product("chair", 0, 0);
+    new Product("cthulhu", 0, 0);
+    new Product("dog-duck", 0, 0);
+    new Product("dragon", 0, 0);
+    new Product("pen", 0, 0);
+    new Product("pet-sweep", 0, 0);
+    new Product("scissors", 0, 0);
+    new Product("shark", 0, 0);
+    new Product("sweep", 0, 0);
+    new Product("tauntaun", 0, 0);
+    new Product("unicorn", 0, 0);
+    new Product("water-can", 0, 0);
+    new Product("wine-glass", 0, 0);
+  } else {
+    grabLocalStorage();
+  }
+}
 
 // Function to choose a random Product
 function getRandomProduct() {
-  return Math.floor(Math.random() * allProducts.length);
+  return Math.floor(Math.random() * productsPersisting.length);
 }
 
 // Function to render 3 random Products
@@ -62,32 +90,32 @@ function renderProducts() {
   }
 
   // Change details of 3 images
-  image1.src = allProducts[randomProduct1].src;
-  image2.src = allProducts[randomProduct2].src;
-  image3.src = allProducts[randomProduct3].src;
+  image1.src = productsPersisting[randomProduct1].src;
+  image2.src = productsPersisting[randomProduct2].src;
+  image3.src = productsPersisting[randomProduct3].src;
 
-  image1.alt = allProducts[randomProduct1].name;
-  image2.alt = allProducts[randomProduct2].name;
-  image3.alt = allProducts[randomProduct3].name;
+  image1.alt = productsPersisting[randomProduct1].name;
+  image2.alt = productsPersisting[randomProduct2].name;
+  image3.alt = productsPersisting[randomProduct3].name;
 
   // Increase views of selected images
-  allProducts[randomProduct1].views++;
-  allProducts[randomProduct2].views++;
-  allProducts[randomProduct3].views++;
+  productsPersisting[randomProduct1].views++;
+  productsPersisting[randomProduct2].views++;
+  productsPersisting[randomProduct3].views++;
 }
 
 // ENSURE PRODUCTS CANNOT REPEAT ON THE NEXT CLICK
 //
 // I spent a while on this and the idea was to:
 //
-// 1. At the end of renderProducts(), define the products on the page as variables and remove them from the array
+// 1. At the end of renderProducts(), declare the products on the page as variables and remove (splice) them from the array
 // 2. After the randomProductx variables have been set from the remaining array entries, push the removed products back into the array for future selection
 //
-// It was working for a bit, unless one of the empty slots was selected and then it returned "undefined". I think defining the array as const rather than let means the number of array entries doesn't change even when actual entries are removed. Spent too long on it for now so moving onto the Chart.js portion.
+// It was working for a bit, unless one of the empty slots was selected and then it returned "undefined". Spent too long on it for now so moving onto the Chart.js portion.
 
 // Function to collect votes
 function handleProductVote(event) {
-  // Need to add functionality that stops once the sum of all votes = 25
+  // Add functionality that stops once the sum of all votes = 25
   if (userVotes >= maxVotes) {
     alert(
       "25 votes have been registered. Results are now available by clicking the SHOW RESULTS button below."
@@ -108,11 +136,11 @@ function handleProductVote(event) {
     renderProducts();
   }
 
-  // Loop through allProducts
-  for (let i = 0; i < allProducts.length; i++) {
+  // Loop through productsPersisting
+  for (let i = 0; i < productsPersisting.length; i++) {
     // Check if the product name in the array matches the alt tag of our image, if so increase votes and stop loop
-    if (votedProduct === allProducts[i].name) {
-      allProducts[i].votes++;
+    if (votedProduct === productsPersisting[i].name) {
+      productsPersisting[i].votes++;
       break;
     }
   }
@@ -121,97 +149,48 @@ function handleProductVote(event) {
 // Add event listener to vote collection
 productContainer.addEventListener("click", handleProductVote);
 
-// Display the results - using an if statement to check if 25 total votes have been received, else the results are not viewable
+// Function to display the results and chart, checking if 25 total votes have been received
 function showResults() {
   if (userVotes >= 25) {
-    // Generate list
+    // Generate list of results and render
     const results = document.getElementById("results");
-    for (let i = 0; i < allProducts.length; i++) {
+    for (let i = 0; i < productsPersisting.length; i++) {
       const li = document.createElement("li");
-      const product = allProducts[i];
+      const product = productsPersisting[i];
       li.textContent = `${product.name} has ${product.views} views and ${product.votes} votes.`;
       results.appendChild(li);
+    }
+
+    // Generate chart - I had my own solution here visible in yesterday's push, but gonna use Tim's solution as it's more succinct
+
+    const chartLabels = [];
+    const chartViews = [];
+    const chartVotes = [];
+
+    for (let i = 0; i < productsPersisting.length; i++) {
+      chartLabels.push(productsPersisting[i].name);
+      chartViews.push(productsPersisting[i].views);
+      chartVotes.push(productsPersisting[i].votes);
     }
 
     const ctx = document.getElementById("resultsChart");
     const config = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: [
-          "Unspecificed Droid Bag",
-          "Fraudulent Banana Slicer",
-          "iWiper",
-          "Salacious Yellow Boots",
-          "Breakfast For Gnomes",
-          "Meatball Bubblegum",
-          "Unsettling Chair",
-          "Cthulhu",
-          "Duck Mask For Dogs",
-          "Tinned Dragon Meat",
-          "Cutlery Extensions For Biro",
-          "Pet Sweep Cleaning System",
-          "Pizza Scissors Version 2",
-          "Terrifying Shark Sleeping Bag",
-          "Baby Sweep Cleaning System",
-          "Terrifying Tauntaun Sleeping Bag",
-          "Tinned Unicorn Meat",
-          "Infinite Watering Can",
-          "Why?-n Glass",
-        ],
-        // I tried using labels: allProducts.name, but it didn't quite work. Not sure why not, Google suggests it should.
+        labels: chartLabels,
         datasets: [
-          // I know there's a better way to do this with a for loop but I'm grouchy and tired today.
           {
             label: "Total votes",
-            data: [
-              allProducts[0].votes,
-              allProducts[1].votes,
-              allProducts[2].votes,
-              allProducts[3].votes,
-              allProducts[4].votes,
-              allProducts[5].votes,
-              allProducts[6].votes,
-              allProducts[7].votes,
-              allProducts[8].votes,
-              allProducts[9].votes,
-              allProducts[10].votes,
-              allProducts[11].votes,
-              allProducts[12].votes,
-              allProducts[13].votes,
-              allProducts[14].votes,
-              allProducts[15].votes,
-              allProducts[16].votes,
-              allProducts[17].votes,
-              allProducts[18].votes,
-            ],
+            data: chartVotes,
           },
           {
             label: "Total views",
-            data: [
-              allProducts[0].views,
-              allProducts[1].views,
-              allProducts[2].views,
-              allProducts[3].views,
-              allProducts[4].views,
-              allProducts[5].views,
-              allProducts[6].views,
-              allProducts[7].views,
-              allProducts[8].views,
-              allProducts[9].views,
-              allProducts[10].views,
-              allProducts[11].views,
-              allProducts[12].views,
-              allProducts[13].views,
-              allProducts[14].views,
-              allProducts[15].views,
-              allProducts[16].views,
-              allProducts[17].views,
-              allProducts[18].views,
-            ],
+            data: chartViews,
           },
         ],
       },
     });
+    addToLocalStorage();
   } else {
     alert(
       "Results unavailable until 25 votes have been received. Attempting to view results before 25 votes have been received may result in redundancy."
@@ -219,9 +198,10 @@ function showResults() {
   }
 }
 
-// Run showResults when we click on the button
+// Invoke showResults on button click
 const viewResults = document.getElementById("button");
 viewResults.addEventListener("click", showResults);
 
-// RENDOR!!!!!
+// Check and render!
+checkLocalStorage();
 renderProducts();
