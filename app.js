@@ -149,7 +149,7 @@ function handleProductVote(event) {
 // Add event listener to vote collection
 productContainer.addEventListener("click", handleProductVote);
 
-// Function to display the results and chart, checking if 25 total votes have been received
+// Function to display the results, checking if 25 total votes have been received
 function showResults() {
   if (userVotes >= 25) {
     // Generate list of results and render
@@ -160,36 +160,6 @@ function showResults() {
       li.textContent = `${product.name} has ${product.views} views and ${product.votes} votes.`;
       results.appendChild(li);
     }
-
-    // Generate chart - I had my own solution here visible in yesterday's push, but gonna use Tim's solution as it's more succinct
-
-    const chartLabels = [];
-    const chartViews = [];
-    const chartVotes = [];
-
-    for (let i = 0; i < productsPersisting.length; i++) {
-      chartLabels.push(productsPersisting[i].name);
-      chartViews.push(productsPersisting[i].views);
-      chartVotes.push(productsPersisting[i].votes);
-    }
-
-    const ctx = document.getElementById("resultsChart");
-    const config = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: chartLabels,
-        datasets: [
-          {
-            label: "Total votes",
-            data: chartVotes,
-          },
-          {
-            label: "Total views",
-            data: chartViews,
-          },
-        ],
-      },
-    });
     addToLocalStorage();
   } else {
     alert(
@@ -199,7 +169,7 @@ function showResults() {
 }
 
 // Invoke showResults on button click
-const viewResults = document.getElementById("button");
+const viewResults = document.getElementById("showResults");
 viewResults.addEventListener("click", showResults);
 
 // Check and render!
