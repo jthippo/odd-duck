@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./reset.css" />
     <link rel="stylesheet" href="./style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="./app.js" defer></script>
+    <script src="./chart.js" defer></script>
     <title>Odd Duck Product Co.</title>
   </head>
   <body>
@@ -16,27 +16,12 @@
     </header>
     <main>
       <div>
-        <p>
-          Hello valued employee! Please select the item below that you would
-          most like to see released by Odd Duck Product Co. in the coming
-          business period. All votes are anonymous. Probably. Your opinion is
-          valued. Probably.
-        </p>
+        <button id="chartButton">Create Chart</button>
       </div>
       <section>
-        <img id="left-img" />
-        <img id="middle-img" />
-        <img id="right-img" />
+        <canvas id="resultsChart"></canvas>
       </section>
-      <div>
-        <button id="showResults">Show Results</button>
-      </div>
-      <div>
-        <ul id="results"></ul>
-      </div>
-      <div>
-        <a href="./chart.html"><button id="toChart">View Chart</button></a>
-      </div>
+      <div></div>
     </main>
     <footer>
       <p>&copy; Odd Duck Product Co. 2023</p>
