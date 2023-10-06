@@ -11,6 +11,9 @@ let maxVotes = 25;
 // Create global array to track totals
 const productsPersisting = [];
 
+// Store products we've just seen
+let previousProducts = [];
+
 // Constructor to make Products and push to array
 function Product(name, views, votes) {
   this.name = name;
@@ -79,15 +82,25 @@ function renderProducts() {
   let randomProduct2 = getRandomProduct();
   let randomProduct3 = getRandomProduct();
 
-  // Stop Products being the same
+  // Stop Products being the same, stop Products repeating
   while (
     randomProduct1 === randomProduct2 ||
     randomProduct1 === randomProduct3 ||
-    randomProduct2 === randomProduct3
+    randomProduct2 === randomProduct3 ||
+    previousProducts.includes(randomProduct1) ||
+    previousProducts.includes(randomProduct2) ||
+    previousProducts.includes(randomProduct3)
   ) {
+    randomProduct1 = getRandomProduct();
     randomProduct2 = getRandomProduct();
     randomProduct3 = getRandomProduct();
   }
+
+  // Empty previousProducts array
+  previousProducts = [];
+
+  // Add seen Products to previousProducts
+  previousProducts.push(randomProduct1, randomProduct2, randomProduct3);
 
   // Change details of 3 images
   image1.src = productsPersisting[randomProduct1].src;
@@ -103,15 +116,6 @@ function renderProducts() {
   productsPersisting[randomProduct2].views++;
   productsPersisting[randomProduct3].views++;
 }
-
-// ENSURE PRODUCTS CANNOT REPEAT ON THE NEXT CLICK
-//
-// I spent a while on this and the idea was to:
-//
-// 1. At the end of renderProducts(), declare the products on the page as variables and remove (splice) them from the array
-// 2. After the randomProductx variables have been set from the remaining array entries, push the removed products back into the array for future selection
-//
-// It was working for a bit, unless one of the empty slots was selected and then it returned "undefined". Spent too long on it for now so moving onto the Chart.js portion.
 
 // Function to collect votes
 function handleProductVote(event) {
